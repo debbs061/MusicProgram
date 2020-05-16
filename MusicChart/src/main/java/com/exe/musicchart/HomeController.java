@@ -1,34 +1,34 @@
 package com.exe.musicchart;
 
-import java.io.FileOutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 
+import com.exe.service.FloCrawlingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import com.exe.dao.TestDAO;
-import com.exe.dto.TestDTO;
 
-@Controller
+@RestController
 public class HomeController {
 
 	@Autowired
 	TestDAO testDao;
-	
+
+    @Autowired
+    FloCrawlingService floCrawlingService;
+
 	@RequestMapping(value = "/", method = {RequestMethod.GET,RequestMethod.POST})
 	public String index(HttpServletRequest request) {
-		
+
 		/*TestDTO dto= testDao.getData();
 		request.setAttribute("dto",dto );*/
 
 		return "index";
 	}
 
-	
-	
-	
+
+	@RequestMapping(value = "/floCrawling", method = {RequestMethod.GET})
+    public void getFloCrawling(){
+	    floCrawlingService.FloChartCrawling();
+    }
 }
