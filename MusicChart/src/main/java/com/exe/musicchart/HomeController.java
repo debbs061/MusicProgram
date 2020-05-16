@@ -22,8 +22,8 @@ public class HomeController {
 	@RequestMapping(value = "/", method = {RequestMethod.GET,RequestMethod.POST})
 	public String index(HttpServletRequest request) {
 		
-		TestDTO dto= testDao.getData();
-		request.setAttribute("dto",dto );
+		/*TestDTO dto= testDao.getData();
+		request.setAttribute("dto",dto );*/
 
 		return "index";
 	}
