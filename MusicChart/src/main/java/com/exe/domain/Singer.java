@@ -10,7 +10,7 @@ public class Singer {
 	public String getSingerKey() {
 		return singerKey;
 	}
-	public void setSinger_key(String singerKey) {
+	public void setSingerKey(String singerKey) {
 		this.singerKey = singerKey;
 	}
 	public String getSingerName() {
