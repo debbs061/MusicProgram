@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sourcemapper">
+
+	<select id="getData" resultType="com.exe.dto.TestDTO">
+		select site_name from testtable
+	</select>
+
+	<select id="getSingerKey" resultType="String" parameterType="String">
+		SELECT
+				SINGER_KEY
+		  FROM
+		  		SINGER
+		 WHERE
+		 		TRIM(REPLACE(REPLACE(SINGER_NAME, ',',''), '<![CDATA[&]]>', '')) = TRIM(#{singerName, jdbcType=VARCHAR})
+	</select>
+
+	<select id="getAlbumKey" resultType="String" parameterType="com.exe.dto.SearchAlbumDTO">
+		SELECT
+				ALBUM_KEY
+		  FROM  ALBUM
+		 WHERE	SINGER_KEY = #{singerKey, jdbcType=VARCHAR}
+		   AND	TRIM(ALBUM_TITLE) = TRIM(#{albumTitle, jdbcType=VARCHAR})
+	</select>
+
+	<select id="getSongKey" resultType="String" parameterType="com.exe.dto.SearchSongDTO">
+		SELECT
+				SONG_KEY
+		  FROM	SONG
+		 WHERE	ALBUM_KEY = #{albumKey, jdbcType=VARCHAR}
+		   AND  TRIM(SONG_TITLE) = TRIM(#{songTitle, jdbcType=VARCHAR})
+	</select>
+
+	<insert id="insertSingerInfo" parameterType="com.exe.domain.Singer">
+		INSERT INTO SINGER(SINGER_KEY, SINGER_NAME, DEBUT_DATE, AGENCY)
+		VALUES(#{singerKey, jdbcType=VARCHAR}, #{singerName, jdbcType=VARCHAR}, #{debutDate, jdbcType=VARCHAR}, #{agency, jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertAlbumInfo" parameterType="com.exe.domain.Album">
+		INSERT INTO ALBUM(ALBUM_KEY, ALBUM_TITLE, ALBUM_IMAGE, SINGER_KEY)
+		VALUES(#{albumKey, jdbcType=VARCHAR}, #{albumTitle, jdbcType=VARCHAR}, #{albumImage, jdbcType=VARCHAR}, #{singerKey, jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertSongInfo" parameterType="com.exe.domain.Song">
+		INSERT INTO SONG(SONG_KEY, SONG_TITLE, REL_DATE, YOUTUBE_LINK, ALBUM_KEY)
+		VALUES(#{songKey, jdbcType=VARCHAR}, #{songTitle, jdbcType=VARCHAR}, #{relDate, jdbcType=VARCHAR}, #{youtubeLink, jdbcType=VARCHAR}, #{albumKey, jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertChartDate" parameterType="com.exe.domain.ChartDate">
+		INSERT INTO CHART_DATE(DATE, TIME, SITE_NAME)
+		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{siteName, jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertChart" parameterType="com.exe.domain.Chart">
+		INSERT INTO CHART(DATE, TIME, SITE_NAME, RANK, RANK_CHANGE, SINGER_KEY, ALBUM_KEY, SONG_KEY)
+		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{siteName, jdbcType=VARCHAR},
+		#{rank, jdbcType=NUMERIC}, #{rankChange, jdbcType=NUMERIC}, #{singerKey, jdbcType=VARCHAR}, #{albumKey, jdbcType=VARCHAR}, #{songKey, jdbcType=VARCHAR})
+	</insert>
+</mapper>
