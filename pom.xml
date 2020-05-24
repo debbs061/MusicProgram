@@ -31,15 +31,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
-		</dependency>
-				
+		</dependency>				
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
-		</dependency>	
-		
+		</dependency>			
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -88,8 +86,7 @@
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
-		</dependency>
-				
+		</dependency>				
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -112,94 +109,82 @@
 			<groupId>org.apache.taglibs</groupId>
 			<artifactId>taglibs-standard-impl</artifactId>
 			<version>1.2.5</version>
-		</dependency>
-	
+		</dependency>	
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency> 
-		
+		</dependency> 		
 		<!-- mybatis -->
 		<dependency>
   			 <groupId>org.mybatis</groupId>
    			 <artifactId>mybatis</artifactId>
     		<version>3.4.6</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- mybatis spring -->
 		<dependency>
    			 <groupId>org.mybatis</groupId>
    			 <artifactId>mybatis-spring</artifactId>
    			 <version>1.3.2</version>
-		</dependency>	       
-		
+		</dependency>	     		
 		<!-- spring-tx -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-tx</artifactId>
 		    <version>${org.springframework-version}</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- spring-jdbc -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
 		    <version>${org.springframework-version}</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- mariadb-java-client -->
 		<dependency>
 		    <groupId>org.mariadb.jdbc</groupId>
 		    <artifactId>mariadb-java-client</artifactId>
 		    <version>2.3.0</version>
-		</dependency>	
-		
+		</dependency>			
 		<!-- dbcp (db 커넥션 풀) -->
 		<dependency>
 		    <groupId>commons-dbcp</groupId>
 		    <artifactId>commons-dbcp</artifactId>
 		    <version>1.4</version>
-		</dependency>		
-		
+		</dependency>				
 		<!--  log4jdbc-log4j2 -->
 		<dependency>
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
 		    <artifactId>log4jdbc-log4j2-jdbc3</artifactId>
 		    <version>1.16</version>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		</dependency>		
+		<!-- log4j-core -->
 		<dependency>
 		    <groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-core</artifactId>
 		    <version>2.11.1</version>
-		</dependency>
-		
-		<!-- 브라우저에 객체를 JSON 포맷의 문자열로 변환시켜 전송할 때 필요 -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.8</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.fasterxml.jackson.dataformat</groupId>
-		    <artifactId>jackson-dataformat-xml</artifactId>
-		    <version>2.9.8</version>
-		</dependency>
-		
+		</dependency>		
+								
 		<!-- java 인스턴스를 json타입의 문자열로 변환할 때 필요 -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
 		    <version>2.8.5</version>
-		</dependency>
-		
-		
-		
+		</dependency>		
+		<!-- jsoup -->
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.11.3</version>
+		</dependency>		
+		<!-- json-lib -->
+		<dependency>
+		    <groupId>net.sf.json-lib</groupId>
+		    <artifactId>json-lib</artifactId>
+		    <version>2.4</version>
+		    <classifier>jdk15</classifier>
+		</dependency>	
 	</dependencies>
     <build>
         <plugins>
