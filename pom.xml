@@ -165,7 +165,20 @@
 		    <artifactId>log4j-core</artifactId>
 		    <version>2.11.1</version>
 		</dependency>		
-								
+		
+		<!-- 브라우저에 객체를 JSON 포맷의 문자열로 변환시켜 전송할 때 필요 -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.9.10.4</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>2.9.8</version>
+		</dependency>
+		
 		<!-- java 인스턴스를 json타입의 문자열로 변환할 때 필요 -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
