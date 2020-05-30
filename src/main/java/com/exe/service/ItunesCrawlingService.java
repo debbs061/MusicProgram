@@ -7,60 +7,134 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.exe.dao.AlbumDAO;
+import com.exe.dao.ChartDAO;
+import com.exe.dao.SingerDAO;
+import com.exe.dao.SongDAO;
+import com.exe.domain.Album;
 import com.exe.domain.ChartDate;
+import com.exe.domain.Singer;
+import com.exe.domain.Song;
+import com.exe.dto.SearchAlbumDTO;
+import com.exe.dto.SearchSongDTO;
 
 @Service
 public class ItunesCrawlingService {
+	@Autowired
+    private SingerDAO singerDAO;
+    @Autowired
+    private AlbumDAO albumDAO;
+    @Autowired
+    private SongDAO songDAO;
+    @Autowired
+    private ChartDAO chartDAO;
 	
+    @Transactional
 	public void ItunesChartCrawling() throws IOException {				
-		try{
-			
+    	try{	
+    		
 			LocalDateTime localDateTime = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             String localDate = timestamp.toString();
-            String date = localDate.split(" ")[0];
-            String time = localDate.split(" ")[1].split("\\.")[0];
             
+            String date = "";
+            date = date.concat(Integer.toString(localDateTime.getYear()));
+            date = date.concat(Integer.toString(localDateTime.getMonthValue()));
+            date = date.concat(Integer.toString(localDateTime.getDayOfMonth()));
+
+            String time = "";
+            time = time.concat(Integer.toString(localDateTime.getHour()));
+            time = time.concat(Integer.toString(localDateTime.getMinute()));
+
             ChartDate chartDate = new ChartDate();
             chartDate.setDate(date);
             chartDate.setTime(time);
-            chartDate.setSiteName("ITUNES");
+            chartDate.setSiteName("ITUNES");     
+            chartDAO.insertChartDate(chartDate);                   
 			String url = "https://music.apple.com/us/playlist/top-100-global/pl.d25f5d1181894928af76c85c967f8f31";
 			Document doc = Jsoup.connect(url).get();
-			
 			List<String> songNameList = doc.getElementsByClass("song-name typography-label").eachText();
 			List<String> singerNameList = doc.getElementsByClass("by-line typography-caption").eachText();
 			List<String> albumImageList = doc.getElementsByClass("media-artwork-v2__image").eachAttr("srcset");
 			List<String> albumList = doc.getElementsByClass("col col-album").select("a[href]").eachText();
 			
-			for(int i=0; i<songNameList.size(); i++) {		
-				// ê³¡ ì •ë³´ 
+			for(int i=0; i<songNameList.size(); i++) {	
+				
+				// °î Á¤º¸ 
 				String songName = songNameList.get(i);
 			
-				// ê°€ìˆ˜ ì •ë³´
+				// °¡¼ö Á¤º¸
 				String singerName = singerNameList.get(i);
 				
-				// ì•¨ë²” ì •ë³´
+				// ¾Ù¹ü Á¤º¸
 				String albumName = albumList.get(i);
 				
-				// ì•¨ë²” ì´ë¯¸ì§€ ( 40 / 80 ) 
-				String size40 = albumImageList.get(i+1).split(",")[0];	// ITUNES ë¡œê³ ì‚¬ì§„ì´ í•¨ê»˜ í¬ë¡¤ë§ë˜ë¯€ë¡œ TOP1ë¶€í„° ê°€ì ¸ì˜¤ê¸° ìœ„í•´ 1ë¶€í„° ì‹œìž‘
-				String albumImage = size40.substring(0,size40.length()-4);
+				// ¾Ù¹ü ÀÌ¹ÌÁö ( 40 / 80 ) 
+				String size40 = albumImageList.get(i+1).split(",")[0];	// ITUNES ·Î°í»çÁøÀÌ ÇÔ²² Å©·Ñ¸µµÇ¹Ç·Î TOP1ºÎÅÍ °¡Á®¿À±â À§ÇØ 1ºÎÅÍ ½ÃÀÛ
+				String albumImgUrl = size40.substring(0,size40.length()-4);
 				
-				// ì•¨ë²” ì´ë¯¸ì§€ ì–´ë–¤ ì‚¬ì´ì¦ˆë¡œ ê°€ì ¸ì˜¬ê±´ì§€ì— ë”°ë¼ ì¶”í›„ ìž‘ì—…
+				// ¾Ù¹ü ÀÌ¹ÌÁö ¾î¶² »çÀÌÁî·Î °¡Á®¿Ã°ÇÁö¿¡ µû¶ó ÃßÈÄ ÀÛ¾÷
 //				for(int j=1; j<songNameList.size(); j++) {	
 //					String []albumImage = albumImageList.get(j).split(",");	
 //					String size40 = albumImage[0].substring(0,albumImage[0].length()-4);
 //					String size80 = albumImage[1].substring(0,albumImage[1].length()-4);
 //				}
 				
-				System.out.println("ìˆœìœ„ : "+(i+1)+"ìœ„");
-				System.out.println("ê³¡ëª… : "+songName);
-				System.out.println("ê°€ìˆ˜ëª… : "+singerName);
-				System.out.println("ì•¨ë²”ëª… : "+albumName);
-				System.out.println("ì•¨ë²” ì´ë¯¸ì§€ URL : "+albumImage);
+				// ±âÁ¸ °¡¼ö Á¤º¸ Á¶È¸
+				String singerKey = singerDAO.getSingerKey(singerName);
+                // µî·ÏµÈ °¡¼ö°¡ ¾øÀ» °æ¿ì INSERT
+                if(singerKey == null){
+                    singerKey = "SINGER"+date+time+(i+1);
+                    Singer singer = new Singer();
+                    singer.setSingerKey(singerKey);
+                    singer.setSingerName(singerName);
+                    singerDAO.insertSingerInfo(singer);
+                }
+                
+                // ±âÁ¸ ¾Ù¹ü Á¤º¸ Á¶È¸
+                SearchAlbumDTO searchAlbumDTO = new SearchAlbumDTO();
+                searchAlbumDTO.setAlbumTitle(albumName);
+                searchAlbumDTO.setSingerKey(singerKey);
+                String albumKey = albumDAO.getAlbumKey(searchAlbumDTO);
+                // µî·ÏµÈ ¾Ù¹üÀÌ ¾øÀ» °æ¿ì INSERT
+                if(albumKey == null){
+                    albumKey = "ALBUM"+date+time+(i+1);
+                    Album album = new Album();
+                    album.setAlbumKey(albumKey);
+                    album.setSingerKey(singerKey);
+                    album.setAlbumTitle(albumName);
+                    album.setAlbumImage(albumImgUrl);
+
+                    albumDAO.insertAlbumInfo(album);
+                }
+                
+                // ±âÁ¸ ³ë·¡ Á¤º¸ Á¶È¸
+                SearchSongDTO searchSongDTO = new SearchSongDTO();
+                searchSongDTO.setAlbumKey(albumKey);
+                searchSongDTO.setSongTitle(songName);
+                String songKey = songDAO.getSongKey(searchSongDTO);
+                // µî·ÏµÈ ³ë·¡°¡ ¾øÀ» °æ¿ì INSERT
+                if(songKey == null){
+                    songKey = "SONG"+date+time+(i+1);
+                    Song song =  new Song();
+                    // ITUNES´Â ¹ß¸ÅÀÏÀ» Ã¹ÆäÀÌÁö¿¡¼­ ¸ø°¡Á®¿À´Â »óÅÂÀÌ¹Ç·Î ÁÖ¼®Ã³¸®
+                    //song.setRelDate(updateDateTimeStr);
+                    song.setSongTitle(songName);
+                    song.setAlbumKey(albumKey);
+                    song.setSongKey(songKey);
+
+                    songDAO.insertSongInfo(song);
+                }
+				
+				System.out.println("¼øÀ§ : "+(i+1)+"À§");
+				System.out.println("°î¸í : "+songName);
+				System.out.println("°¡¼ö¸í : "+singerName);
+				System.out.println("¾Ù¹ü¸í : "+albumName);
+				System.out.println("¾Ù¹ü ÀÌ¹ÌÁö URL : "+albumImgUrl);
 				System.out.println();
 			}			
 			
