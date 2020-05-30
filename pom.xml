@@ -5,6 +5,7 @@
 	<groupId>com.exe</groupId>
 	<artifactId>musicchart</artifactId>
 	<name>MusicChart</name>
+	
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -13,6 +14,20 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
+	
+	<!-- google search api를 위한  version 통일 -->
+	<dependencyManagement>
+	  <dependencies>
+	    <dependency>
+	      <groupId>com.google.cloud</groupId>
+	      <artifactId>libraries-bom</artifactId>
+	      <version>2.2.0</version>
+	      <type>pom</type>
+	      <scope>import</scope>
+	    </dependency>
+	 </dependencies>
+	</dependencyManagement>	
+	
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -116,7 +131,16 @@
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency> 		
+		</dependency> 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>4.3.4.RELEASE</version>
+		    <scope>test</scope>
+		</dependency>
+	
+		
 		<!-- mybatis -->
 		<dependency>
   			 <groupId>org.mybatis</groupId>
@@ -165,20 +189,7 @@
 		    <artifactId>log4j-core</artifactId>
 		    <version>2.11.1</version>
 		</dependency>		
-		
-		<!-- 브라우저에 객체를 JSON 포맷의 문자열로 변환시켜 전송할 때 필요 -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.10.4</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.fasterxml.jackson.dataformat</groupId>
-		    <artifactId>jackson-dataformat-xml</artifactId>
-		    <version>2.9.8</version>
-		</dependency>
-		
+								
 		<!-- java 인스턴스를 json타입의 문자열로 변환할 때 필요 -->
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
@@ -197,7 +208,21 @@
 		    <artifactId>json-lib</artifactId>
 		    <version>2.4</version>
 		    <classifier>jdk15</classifier>
-		</dependency>	
+		</dependency>
+		
+		<!-- api for youtube link -->
+		<dependency>
+		     <groupId>com.google.apis</groupId>
+		     <artifactId>google-api-services-youtube</artifactId>
+		     <version>v3-rev20200423-1.30.9</version>
+   	    </dependency>	
+   	    <dependency>
+	      <groupId>com.google.api-client</groupId>
+	      <artifactId>google-api-client</artifactId>
+	      <version>1.30.9</version>
+	    </dependency>		   
+	    
+	    
 	</dependencies>
     <build>
         <plugins>
