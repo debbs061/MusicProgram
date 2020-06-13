@@ -18,4 +18,8 @@ public class ChartDAO {
     public void insertChart(Chart chart){
         sessionTemplate.insert("sourcemapper.insertChart", chart);
     }
+    
+    public Integer getPreRank(Chart chart){ 
+        return sessionTemplate.selectOne("sourcemapper.getPreRank",chart);     
+    }
 }
