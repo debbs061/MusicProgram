@@ -12,6 +12,6 @@ request.setCharacterEncoding("UTF-8");
 	Hello world!  
 </h1>
 
-<P>  The time on the server is ${dto.site_name}. </P>
+<P>  The time on the server is. </P>
 </body>
 </html>

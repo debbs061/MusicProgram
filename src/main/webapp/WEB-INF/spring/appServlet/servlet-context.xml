@@ -19,16 +19,7 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
-	
-		<context:component-scan base-package="com.exe.*" />
-		
-	
-	<beans:bean id="testDAO" class="com.exe.dao.TestDAO">
-		<beans:property name="sessionTemplate" ref="sessionTemplate"/>
-	</beans:bean>
-	
-	
-
+	</beans:bean>	
+		<context:component-scan base-package="com.exe.*" />		
 	
 </beans:beans>
