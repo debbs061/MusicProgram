@@ -1,6 +1,9 @@
 package com.exe.dao;
 
 import com.exe.domain.Singer;
+
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +15,7 @@ public class SingerDAO {
     private SqlSessionTemplate sessionTemplate;
 
     public String getSingerKey(String singerName){
-        return sessionTemplate.selectOne("sourcemapper.getSingerKey", singerName);
+      return sessionTemplate.selectOne("sourcemapper.getSingerKey", singerName);
     }
 
     public void insertSingerInfo(Singer singer){

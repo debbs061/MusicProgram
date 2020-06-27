@@ -1,11 +1,9 @@
 package com.exe.dto;
 
-public class SearchSongDTO {
-    private String songTitle;
-    private String albumKey;
+import lombok.Data;
 
-    public String getSongTitle(){return songTitle;}
-    public void setSongTitle(String songTitle){this.songTitle = songTitle;}
-    public String getAlbumKey(){return albumKey;}
-    public  void setAlbumKey(String albumKey){this.albumKey = albumKey;}
+@Data
+public class SearchSongDTO {
+    private String song_title;
+    private String album_key;
 }

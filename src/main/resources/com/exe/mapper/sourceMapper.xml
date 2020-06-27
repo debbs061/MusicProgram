@@ -4,40 +4,69 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="sourcemapper">
-
-	<select id="getSingerKey" resultType="String" parameterType="String">
+	
+	<!-- api 용 -->
+	<select id="getTodayChart" resultType="com.exe.domain.Chart" parameterType="com.exe.dto.SearchChartDTO">
 		SELECT
-				SINGER_KEY
+			*
+		FROM
+			CHART
+		WHERE
+			DATE = #{date, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getSongInfo" resultType="com.exe.domain.Song" parameterType="com.exe.dto.SearchSongDTO">
+		SELECT
+				SONG_KEY, SONG_TITLE, REL_DATE, YOUTUBE_LINK, ALBUM_KEY
+		  FROM
+		  		SONG
+		 WHERE
+		 		SONG_KEY = #{song_key, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getSingerInfo" resultType="com.exe.domain.Singer" parameterType="com.exe.dto.SearchSingerDTO">
+		SELECT
+				SINGER_KEY, SINGER_NAME, DEBUT_DATE, AGENCY
 		  FROM
 		  		SINGER
 		 WHERE
-		 		TRIM(REPLACE(REPLACE(SINGER_NAME, ',',''), '<![CDATA[&]]>', '')) = TRIM(#{singerName, jdbcType=VARCHAR})
+		 		SINGER_NAME = #{singer_name, jdbcType=VARCHAR}
+	</select>
+
+	<!-- 기존 -->
+	<select id="getSingerKey" resultType="String" parameterType="String">
+		SELECT
+				SINGER_KEY 
+		  FROM
+		  		SINGER
+		 WHERE
+		 		TRIM(REPLACE(REPLACE(SINGER_NAME, ',',''), '<![CDATA[&]]>', '')) = TRIM(REPLACE(REPLACE(#{singer_name, jdbcType=VARCHAR}, ',',''), '<![CDATA[&]]>', ''))
 	</select>
 
 	<select id="getAlbumKey" resultType="String" parameterType="com.exe.dto.SearchAlbumDTO">
 		SELECT
 				ALBUM_KEY
 		  FROM  ALBUM
-		 WHERE	SINGER_KEY = #{singerKey, jdbcType=VARCHAR}
-		   AND	TRIM(ALBUM_TITLE) = TRIM(#{albumTitle, jdbcType=VARCHAR})
+		 WHERE	SINGER_KEY = #{singer_key, jdbcType=VARCHAR}
+		   AND	TRIM(ALBUM_TITLE) = TRIM(#{album_title, jdbcType=VARCHAR})
 	</select>
 
 	<select id="getSongKey" resultType="String" parameterType="com.exe.dto.SearchSongDTO">
 		SELECT
 				SONG_KEY
 		  FROM	SONG
-		 WHERE	ALBUM_KEY = #{albumKey, jdbcType=VARCHAR}
-		   AND  TRIM(SONG_TITLE) = TRIM(#{songTitle, jdbcType=VARCHAR})
+		 WHERE	ALBUM_KEY = #{album_key, jdbcType=VARCHAR}
+		   AND  TRIM(SONG_TITLE) = TRIM(#{song_title, jdbcType=VARCHAR})
 	</select>
 	
 	<select id="getPreRank" resultType="Integer" parameterType="com.exe.domain.Chart">
       SELECT
             RANK
         FROM   CHART  
-       WHERE SITE_NAME = #{siteName, jdbcType=VARCHAR}
-         AND  SONG_KEY = #{songKey, jdbcType=VARCHAR}
-         AND  SINGER_KEY = #{singerKey, jdbcType=VARCHAR}
-         AND  ALBUM_KEY = #{albumKey, jdbcType=VARCHAR}
+       WHERE SITE_NAME = #{site_name, jdbcType=VARCHAR}
+         AND  SONG_KEY = #{song_key, jdbcType=VARCHAR}
+         AND  SINGER_KEY = #{singer_key, jdbcType=VARCHAR}
+         AND  ALBUM_KEY = #{album_key, jdbcType=VARCHAR}
      ORDER BY
             CAST(DATE as unsigned) DESC,
             CAST(TIME as unsigned) DESC
@@ -46,28 +75,44 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insertSingerInfo" parameterType="com.exe.domain.Singer">
 		INSERT INTO SINGER(SINGER_KEY, SINGER_NAME, DEBUT_DATE, AGENCY)
-		VALUES(#{singerKey, jdbcType=VARCHAR}, #{singerName, jdbcType=VARCHAR}, #{debutDate, jdbcType=VARCHAR}, #{agency, jdbcType=VARCHAR})
+		VALUES(#{singer_key, jdbcType=VARCHAR}, #{singer_name, jdbcType=VARCHAR}, #{debut_date, jdbcType=VARCHAR}, #{agency, jdbcType=VARCHAR})
 	</insert>
 
 	<insert id="insertAlbumInfo" parameterType="com.exe.domain.Album">
 		INSERT INTO ALBUM(ALBUM_KEY, ALBUM_TITLE, ALBUM_IMAGE, SINGER_KEY)
-		VALUES(#{albumKey, jdbcType=VARCHAR}, #{albumTitle, jdbcType=VARCHAR}, #{albumImage, jdbcType=VARCHAR}, #{singerKey, jdbcType=VARCHAR})
+		VALUES(#{album_key, jdbcType=VARCHAR}, #{album_title, jdbcType=VARCHAR}, #{album_image, jdbcType=VARCHAR}, #{singer_key, jdbcType=VARCHAR})
 	</insert>
 
 	<insert id="insertSongInfo" parameterType="com.exe.domain.Song">
 		INSERT INTO SONG(SONG_KEY, SONG_TITLE, REL_DATE, YOUTUBE_LINK, ALBUM_KEY)
-		VALUES(#{songKey, jdbcType=VARCHAR}, #{songTitle, jdbcType=VARCHAR}, #{relDate, jdbcType=VARCHAR}, #{youtubeLink, jdbcType=VARCHAR}, #{albumKey, jdbcType=VARCHAR})
+		VALUES(#{song_key, jdbcType=VARCHAR}, #{song_title, jdbcType=VARCHAR}, #{rel_date, jdbcType=VARCHAR}, #{youtube_link, jdbcType=VARCHAR}, #{album_key, jdbcType=VARCHAR})
 	</insert>
 
 	<insert id="insertChartDate" parameterType="com.exe.domain.ChartDate">
 		INSERT INTO CHART_DATE(DATE, TIME, SITE_NAME)
-		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{siteName, jdbcType=VARCHAR})
+		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{site_name, jdbcType=VARCHAR})
 	</insert>
 
 	<insert id="insertChart" parameterType="com.exe.domain.Chart">
 		INSERT INTO CHART(DATE, TIME, SITE_NAME, RANK, RANK_CHANGE, SINGER_KEY, ALBUM_KEY, SONG_KEY)
-		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{siteName, jdbcType=VARCHAR},
-		#{rank, jdbcType=NUMERIC}, #{rankChange, jdbcType=NUMERIC}, #{singerKey, jdbcType=VARCHAR}, #{albumKey, jdbcType=VARCHAR}, #{songKey, jdbcType=VARCHAR})
+		VALUES(#{date, jdbcType=VARCHAR}, #{time, jdbcType=VARCHAR}, #{site_name, jdbcType=VARCHAR},
+		#{rank, jdbcType=NUMERIC}, #{rank_change, jdbcType=NUMERIC}, #{singer_key, jdbcType=VARCHAR}, #{album_key, jdbcType=VARCHAR}, #{song_key, jdbcType=VARCHAR})
 	</insert>
+	
+	<select id="getYoutubeLink" resultType="String" parameterType="String">
+		SELECT
+				YOUTUBE_LINK
+		  FROM
+		  		SONG
+		 WHERE
+		 		SONG_KEY = #{song_key, jdbcType=NUMERIC}
+	</select>
+	
+	
+	 <update id="updateSongInfo" parameterType="com.exe.domain.Song">
+      UPDATE SONG
+     	 SET YOUTUBE_LINK = #{youtube_link, jdbcType=VARCHAR}
+       WHERE SONG_KEY = #{song_key, jdbcType=VARCHAR}
+   	 </update>
 	
 </mapper>
