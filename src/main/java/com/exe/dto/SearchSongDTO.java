@@ -6,4 +6,5 @@ import lombok.Data;
 public class SearchSongDTO {
     private String song_title;
     private String album_key;
+    private String song_key;
 }

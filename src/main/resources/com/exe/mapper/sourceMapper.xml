@@ -8,11 +8,11 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 	<!-- api 용 -->
 	<select id="getTodayChart" resultType="com.exe.domain.Chart" parameterType="com.exe.dto.SearchChartDTO">
 		SELECT
-			*
-		FROM
-			CHART
-		WHERE
-			DATE = #{date, jdbcType=VARCHAR}
+		    	SONG_KEY, SINGER_KEY, ALBUM_KEY, RANK_CHANGE, DATE, TIME, SITE_NAME, RANK
+		  FROM
+				CHART
+	     WHERE 
+				DATE = #{date, jdbcType=VARCHAR}
 	</select>
 	
 	<select id="getSongInfo" resultType="com.exe.domain.Song" parameterType="com.exe.dto.SearchSongDTO">
@@ -30,7 +30,16 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 		  FROM
 		  		SINGER
 		 WHERE
-		 		SINGER_NAME = #{singer_name, jdbcType=VARCHAR}
+		 		SINGER_KEY = #{singer_key, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAlbumInfo" resultType="com.exe.domain.Album" parameterType="com.exe.dto.SearchAlbumDTO">
+		SELECT
+				ALBUM_KEY, ALBUM_TITLE, ALBUM_IMAGE, SINGER_KEY
+		  FROM
+		  		ALBUM
+		 WHERE
+		 		ALBUM_KEY = #{album_key, jdbcType=VARCHAR}
 	</select>
 
 	<!-- 기존 -->
