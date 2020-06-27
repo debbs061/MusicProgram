@@ -38,8 +38,8 @@ public class ItunesCrawlingService {
 	
     @Transactional
 	public void ItunesChartCrawling() throws IOException {				
-    	try{	    		
-    		LocalDateTime localDateTime = LocalDateTime.now();
+    	try{	
+			LocalDateTime localDateTime = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             String localDate = timestamp.toString();
             
@@ -55,16 +55,17 @@ public class ItunesCrawlingService {
             ChartDate chartDate = new ChartDate();
             chartDate.setDate(date);
             chartDate.setTime(time);
-            chartDate.setSiteName("ITUNES");     
-            chartDAO.insertChartDate(chartDate);                  
+            chartDate.setSite_name("ITUNES");     
+            chartDAO.insertChartDate(chartDate);                   
 			String url = "https://music.apple.com/us/playlist/top-100-global/pl.d25f5d1181894928af76c85c967f8f31";
 			Document doc = Jsoup.connect(url).get();
 			List<String> songNameList = doc.getElementsByClass("song-name typography-label").eachText();
 			List<String> singerNameList = doc.getElementsByClass("by-line typography-caption").eachText();
 			List<String> albumImageList = doc.getElementsByClass("media-artwork-v2__image").eachAttr("srcset");
 			List<String> albumList = doc.getElementsByClass("col col-album").select("a[href]").eachText();
-			
+			 
 			YoutubeSearchApi obj = new YoutubeSearchApi();
+			int cnt = 0; // 유튜브 Api 호출 횟수 제한 용도
 			
 			for(int i=0; i<songNameList.size(); i++) {	
 				
@@ -90,58 +91,73 @@ public class ItunesCrawlingService {
 				
 				
 				// 기존 가수 정보 조회
-				String singerKey = singerDAO.getSingerKey(singerName);
+				String singerKey = singerDAO.getSingerKey(singerName);	
                 // 등록된 가수가 없을 경우 INSERT
                 if(singerKey == null){
                     singerKey = "ISINGER"+date+time+(i+1);
                     Singer singer = new Singer();
-                    singer.setSingerKey(singerKey);
-                    singer.setSingerName(singerName);
+                    singer.setSinger_key(singerKey);
+                    singer.setSinger_name(singerName);
                     singerDAO.insertSingerInfo(singer);
                 }
                 
                 // 기존 앨범 정보 조회
                 SearchAlbumDTO searchAlbumDTO = new SearchAlbumDTO();
-                searchAlbumDTO.setAlbumTitle(albumName);
-                searchAlbumDTO.setSingerKey(singerKey);
+                searchAlbumDTO.setAlbum_title(albumName);
+                searchAlbumDTO.setSinger_key(singerKey);
                 String albumKey = albumDAO.getAlbumKey(searchAlbumDTO);
                 // 등록된 앨범이 없을 경우 INSERT
                 if(albumKey == null){	
                     albumKey = "IALBUM"+date+time+(i+1);
                     Album album = new Album();
-                    album.setAlbumKey(albumKey);
-                    album.setSingerKey(singerKey);
-                    album.setAlbumTitle(albumName);
-                    album.setAlbumImage(albumImgUrl);
+                    album.setAlbum_key(albumKey);
+                    album.setSinger_key(singerKey);
+                    album.setAlbum_title(albumName);
+                    album.setAlbum_image(albumImgUrl);
                     albumDAO.insertAlbumInfo(album);
                 }
                 // 기존 노래 정보 조회
                 SearchSongDTO searchSongDTO = new SearchSongDTO();
-                searchSongDTO.setAlbumKey(albumKey);
-                searchSongDTO.setSongTitle(songName);
+                searchSongDTO.setAlbum_key(albumKey);
+                searchSongDTO.setSong_title(songName);
                 String songKey = songDAO.getSongKey(searchSongDTO);
                 String youtubeLink = "";
-                // 등록된 노래가 없을 경우 INSERT                
-                if(songKey == null){                	
-                	youtubeLink = obj.main(songName);
-                    songKey = "ISONG"+date+time+(i+1);
-                    Song song =  new Song();
-                    // ITUNES는 발매일을 첫페이지에서 못가져오는 상태이므로 주석처리
-                    //song.setRelDate(updateDateTimeStr);
-                    song.setSongTitle(songName);
-                    song.setAlbumKey(albumKey);
-                    song.setSongKey(songKey);
-                    song.setYoutubeLink(youtubeLink);
- 
-                    songDAO.insertSongInfo(song);
-                }
+                
+                // 등록된 노래가 없을 경우 INSERT - 유튜브API는 사이트당 20회 미만으로 제한  	            
+                if(songKey == null){  
+	            	Song song =  new Song();
+	            	if(cnt<20) {
+	            		youtubeLink = obj.main(songName); 
+	            		song.setYoutube_link(youtubeLink);
+	            		cnt++; 
+	            	}
+	                songKey = "ISONG"+date+time+(i+1);                    
+	                // ITUNES는 발매일을 첫페이지에서 못가져오는 상태이므로 주석처리
+	                //song.setRelDate(updateDateTimeStr);
+	                song.setSong_title(songName);
+	                song.setAlbum_key(albumKey);
+	                song.setSong_key(songKey);
+	                
+	                songDAO.insertSongInfo(song);
+	            }else{
+	            	Song song =  new Song();
+	            	if(songDAO.getYoutubeLink(songKey) == null) {
+		            	if(cnt<20) {
+		            		youtubeLink = obj.main(songName);
+		            		song.setYoutube_link(youtubeLink);
+		            		cnt++; 
+		            	}
+		                song.setSong_key(songKey);
+		                songDAO.updateSongInfo(song);
+	            	} 
+	             }
                 
                 // ITUNES 메인페이지에서 순위변동 정보를 크롤링하지 못하므로 계산
                 Chart chart = new Chart();
-                chart.setSiteName("ITUNES");
-                chart.setSingerKey(singerKey); 
-                chart.setAlbumKey(albumKey);
-                chart.setSongKey(songKey);
+                chart.setSite_name("ITUNES");
+                chart.setSinger_key(singerKey); 
+                chart.setAlbum_key(albumKey);
+                chart.setSong_key(songKey);
                 
                 // CHART 테이블에 들어온 적 없는 곡이라면 순위변동 0으로 처리
                 int rankChange = 0;                
@@ -155,7 +171,7 @@ public class ItunesCrawlingService {
                 chart.setDate(chartDate.getDate());
                 chart.setTime(chartDate.getTime());
                 chart.setRank(i+1);
-                chart.setRankChange(rankChange);
+                chart.setRank_change(rankChange);
                 chartDAO.insertChart(chart);
 				
 				System.out.println("순위 : "+(i+1)+"위");
@@ -167,7 +183,7 @@ public class ItunesCrawlingService {
 				System.out.println("유튜브링크 : "+youtubeLink);
 				System.out.println();
 				
-			}			
+			}	
 			
 		}catch(Exception e){
 			System.out.println(e.getMessage());

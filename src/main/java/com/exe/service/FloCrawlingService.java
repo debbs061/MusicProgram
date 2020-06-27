@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class FloCrawlingService {
@@ -34,24 +35,24 @@ public class FloCrawlingService {
 
     @Transactional
     public void FloChartCrawling(){
-        try{
-            LocalDateTime localDateTime = LocalDateTime.now();
+    	try{
+        	LocalDateTime localDateTime = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             String localDate = timestamp.toString();
-
+            
             String date = "";
             date = date.concat(Integer.toString(localDateTime.getYear()));
-            date = date.concat(Integer.toString(localDateTime.getMonthValue()));
-            date = date.concat(Integer.toString(localDateTime.getDayOfMonth()));
+            date = date.concat(localDateTime.format(DateTimeFormatter.ofPattern("MM")));
+            date = date.concat(localDateTime.format(DateTimeFormatter.ofPattern("dd")));
 
             String time = "";
-            time = time.concat(Integer.toString(localDateTime.getHour()));
-            time = time.concat(Integer.toString(localDateTime.getMinute()));
+            time = time.concat(localDateTime.format(DateTimeFormatter.ofPattern("HH")));
+            time = time.concat(localDateTime.format(DateTimeFormatter.ofPattern("mm")));
 
             ChartDate chartDate = new ChartDate();
             chartDate.setDate(date);
             chartDate.setTime(time);
-            chartDate.setSiteName("FLO");
+            chartDate.setSite_name("FLO");
 
             chartDAO.insertChartDate(chartDate);
 
@@ -66,6 +67,9 @@ public class FloCrawlingService {
             }
 
             JsonArray data = parseJsonData(result);
+            
+            YoutubeSearchApi obj = new YoutubeSearchApi();
+			int cnt = 0; // 유튜브 Api 호출 횟수 제한 용도
 
             for(int i=0; i<data.size(); i++){
                 JsonObject chartData = (JsonObject)data.get(i);
@@ -94,60 +98,79 @@ public class FloCrawlingService {
                 String singerKey = singerDAO.getSingerKey(singerName);
                 // 등록된 가수가 없을 경우 INSERT
                 if(singerKey == null){
-                    singerKey = "SINGER"+date+time+(i+1);
+                    singerKey = "FSINGER"+date+time+(i+1);
 
                     Singer singer = new Singer();
-                    singer.setSingerKey(singerKey);
-                    singer.setSingerName(singerName);
+                    singer.setSinger_key(singerKey);
+                    singer.setSinger_name(singerName);
 
                     singerDAO.insertSingerInfo(singer);
                 }
 
                 // 기존 앨범 정보 조회
                 SearchAlbumDTO searchAlbumDTO = new SearchAlbumDTO();
-                searchAlbumDTO.setAlbumTitle(albumName);
-                searchAlbumDTO.setSingerKey(singerKey);
+                searchAlbumDTO.setAlbum_title(albumName);
+                searchAlbumDTO.setSinger_key(singerKey);
                 String albumKey = albumDAO.getAlbumKey(searchAlbumDTO);
                 // 등록된 앨범이 없을 경우 INSERT
                 if(albumKey == null){
-                    albumKey = "ALBUM"+date+time+(i+1);
+                    albumKey = "FALBUM"+date+time+(i+1);
 
                     Album album = new Album();
-                    album.setAlbumKey(albumKey);
-                    album.setSingerKey(singerKey);
-                    album.setAlbumTitle(albumName);
-                    album.setAlbumImage(albumImgUrl);
+                    album.setAlbum_key(albumKey);
+                    album.setSinger_key(singerKey);
+                    album.setAlbum_title(albumName);
+                    album.setAlbum_image(albumImgUrl);
 
                     albumDAO.insertAlbumInfo(album);
                 }
 
                 // 기존 노래 정보 조회
                 SearchSongDTO searchSongDTO = new SearchSongDTO();
-                searchSongDTO.setAlbumKey(albumKey);
-                searchSongDTO.setSongTitle(songName);
+                searchSongDTO.setAlbum_key(albumKey);
+                searchSongDTO.setSong_title(songName);
                 String songKey = songDAO.getSongKey(searchSongDTO);
-                // 등록된 노래가 없을 경우 INSERT
-                if(songKey == null){
-                    songKey = "SONG"+date+time+(i+1);
-
-                    Song song =  new Song();
-                    song.setRelDate(updateDateTimeStr);
-                    song.setSongTitle(songName);
-                    song.setAlbumKey(albumKey);
-                    song.setSongKey(songKey);
+                String youtubeLink = "";
+                
+                // 등록된 노래가 없을 경우 INSERT - 유튜브API는 사이트당 20회 미만으로 제한  	            
+                if(songKey == null){  
+                	Song song =  new Song();                    
+                    if(cnt<20) {
+	            		youtubeLink = obj.main(songName); 
+	            		song.setYoutube_link(youtubeLink);
+	            		cnt++; 
+	            		System.out.println("유튜브링크 크롤링 수 : "+cnt);
+	            	}
+                    songKey = "FSONG"+date+time+(i+1);
+                    song.setRel_date(updateDateTimeStr);
+                    song.setSong_title(songName);
+                    song.setAlbum_key(albumKey);
+                    song.setSong_key(songKey);
 
                     songDAO.insertSongInfo(song);
-                }
+                }else{
+	            	Song song =  new Song();
+	            	if(songDAO.getYoutubeLink(songKey) == null) {
+		            	if(cnt<20) {
+		            		youtubeLink = obj.main(songName);
+		            		song.setYoutube_link(youtubeLink);
+		            		cnt++; 
+		            		System.out.println("유튜브링크 크롤링 수 : "+cnt);
+		            	}
+		                song.setSong_key(songKey);
+		                songDAO.updateSongInfo(song);
+	            	} 
+	             }
 
                 Chart chart = new Chart();
                 chart.setDate(chartDate.getDate());
                 chart.setTime(chartDate.getTime());
-                chart.setSiteName("FLO");
+                chart.setSite_name("FLO");
                 chart.setRank(i+1);
-                chart.setRankChange(rankBadge);
-                chart.setSingerKey(singerKey);
-                chart.setAlbumKey(albumKey);
-                chart.setSongKey(songKey);
+                chart.setRank_change(rankBadge);
+                chart.setSinger_key(singerKey);
+                chart.setAlbum_key(albumKey);
+                chart.setSong_key(songKey);
 
                 chartDAO.insertChart(chart);
 
@@ -159,6 +182,7 @@ public class FloCrawlingService {
                 System.out.println("앨범명 : "+albumName);
                 System.out.println("앨범 이미지 URL : "+albumImgUrl);
                 System.out.println("차트 신규 진입 : "+newYn+", 순위 변동 : "+rankBadge);
+                System.out.println("유튜브링크 : "+youtubeLink);
                 System.out.println();
             }
 
