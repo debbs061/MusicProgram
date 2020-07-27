@@ -6,40 +6,76 @@ PUBLIC "-/mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="sourcemapper">
 	
 	<!-- api 용 -->
-	<select id="getTodayChart" resultType="com.exe.domain.Chart" parameterType="com.exe.dto.SearchChartDTO">
+	<select id="getTodayChart" resultType="com.exe.dto.SearchChartDTO" parameterType="com.exe.dto.SearchChartDTO">
 		SELECT
-		    	SONG_KEY, SINGER_KEY, ALBUM_KEY, RANK_CHANGE, DATE, TIME, SITE_NAME, RANK
-		  FROM
-				CHART
-	     WHERE 
-				DATE = #{date, jdbcType=VARCHAR}
+			C.SITE_NAME,
+			A.ALBUM_IMAGE,			
+			S.SONG_TITLE,
+			SG.SINGER_NAME,
+			A.ALBUM_TITLE,
+			S.YOUTUBE_LINK,
+			C.RANK,
+			C.RANK_CHANGE
+		FROM
+			CHART C
+		JOIN SONG S ON
+			C.SONG_KEY = S.SONG_KEY
+		JOIN SINGER SG ON
+			C.SINGER_KEY = SG.SINGER_KEY
+		JOIN ALBUM A ON
+			C.ALBUM_KEY = A.ALBUM_KEY
+		WHERE
+			DATE = #{date, jdbcType=VARCHAR}
+		  AND
+		    SITE_NAME = #{site_name, jdbcType=VARCHAR}
 	</select>
 	
-	<select id="getSongInfo" resultType="com.exe.domain.Song" parameterType="com.exe.dto.SearchSongDTO">
+	<select id="getSongInfo" resultType="com.exe.dto.SearchWordDTO" parameterType="String">
 		SELECT
-				SONG_KEY, SONG_TITLE, REL_DATE, YOUTUBE_LINK, ALBUM_KEY
-		  FROM
-		  		SONG
-		 WHERE
-		 		SONG_KEY = #{song_key, jdbcType=VARCHAR}
+			S.SONG_TITLE,
+			SG.SINGER_NAME,	
+			A.ALBUM_TITLE,
+			S.YOUTUBE_LINK
+		FROM
+			SINGER SG
+		JOIN ALBUM A ON
+			SG.SINGER_KEY = A.SINGER_KEY 
+		JOIN SONG S ON
+			A.ALBUM_KEY = S.ALBUM_KEY 
+		WHERE
+			UPPER(REPLACE(SONG_TITLE, ' ', '')) LIKE CONCAT ('%',UPPER(REPLACE(#{searchWord}, ' ', '')),	'%')
 	</select>
 	
-	<select id="getSingerInfo" resultType="com.exe.domain.Singer" parameterType="com.exe.dto.SearchSingerDTO">
+	<select id="getSingerInfo" resultType="com.exe.dto.SearchWordDTO" parameterType="String">
 		SELECT
-				SINGER_KEY, SINGER_NAME, DEBUT_DATE, AGENCY
-		  FROM
-		  		SINGER
-		 WHERE
-		 		SINGER_KEY = #{singer_key, jdbcType=VARCHAR}
+			S.SONG_TITLE,
+			SG.SINGER_NAME,	
+			A.ALBUM_TITLE,
+			S.YOUTUBE_LINK
+		FROM
+			SINGER SG
+		JOIN ALBUM A ON
+			SG.SINGER_KEY = A.SINGER_KEY 
+		JOIN SONG S ON
+			A.ALBUM_KEY = S.ALBUM_KEY 
+		WHERE
+			UPPER(REPLACE(SINGER_NAME ,' ','')) LIKE CONCAT ('%', UPPER(REPLACE(#{searchWord},' ','')), '%')
 	</select>
 	
-	<select id="getAlbumInfo" resultType="com.exe.domain.Album" parameterType="com.exe.dto.SearchAlbumDTO">
+	<select id="getAlbumInfo" resultType="com.exe.dto.SearchWordDTO" parameterType="String">
 		SELECT
-				ALBUM_KEY, ALBUM_TITLE, ALBUM_IMAGE, SINGER_KEY
-		  FROM
-		  		ALBUM
-		 WHERE
-		 		ALBUM_KEY = #{album_key, jdbcType=VARCHAR}
+			S.SONG_TITLE,
+			SG.SINGER_NAME,	
+			A.ALBUM_TITLE,
+			S.YOUTUBE_LINK
+		FROM
+			SINGER SG
+		JOIN ALBUM A ON
+			SG.SINGER_KEY = A.SINGER_KEY 
+		JOIN SONG S ON
+			A.ALBUM_KEY = S.ALBUM_KEY 
+		WHERE
+			UPPER(REPLACE(ALBUM_TITLE ,' ','')) LIKE CONCAT ('%', UPPER(REPLACE(#{searchWord},' ','')), '%')
 	</select>
 
 	<!-- 기존 -->

@@ -57,7 +57,7 @@ public class ItunesCrawlingService {
             chartDate.setTime(time);
             chartDate.setSite_name("ITUNES");     
             chartDAO.insertChartDate(chartDate);                   
-			String url = "https://music.apple.com/us/playlist/top-100-global/pl.d25f5d1181894928af76c85c967f8f31";
+			String url = "https://music.apple.com/us/playlist/top-100-south-korea/pl.d3d10c32fbc540b38e266367dc8cb00c";
 			Document doc = Jsoup.connect(url).get();
 			List<String> songNameList = doc.getElementsByClass("song-name typography-label").eachText();
 			List<String> singerNameList = doc.getElementsByClass("by-line typography-caption").eachText();
