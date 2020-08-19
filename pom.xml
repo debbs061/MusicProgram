@@ -71,7 +71,7 @@
 			<version>${org.slf4j-version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.15</version>
@@ -94,7 +94,7 @@
 				</exclusion>
 			</exclusions>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 
 		<!-- @Inject -->
 		<dependency>
@@ -145,7 +145,7 @@
 		<dependency>
   			 <groupId>org.mybatis</groupId>
    			 <artifactId>mybatis</artifactId>
-    		<version>3.4.6</version>
+    		<version>3.5.2</version>
 		</dependency>		
 		<!-- mybatis spring -->
 		<dependency>
@@ -220,9 +220,36 @@
 	      <groupId>com.google.api-client</groupId>
 	      <artifactId>google-api-client</artifactId>
 	      <version>1.30.9</version>
-	    </dependency>		   
+	    </dependency>	
 	    
-	    
+	    <!-- lombok -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- log4j -->
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+		
+		<!-- 브라우저에 객체를 JSON 포맷의 문자열로 변환시켜 전송할 때 필요 -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.9.8</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>2.9.8</version>
+		</dependency>
+		
 	</dependencies>
     <build>
         <plugins>
