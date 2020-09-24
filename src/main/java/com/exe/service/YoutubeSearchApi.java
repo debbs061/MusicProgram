@@ -19,14 +19,13 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.Test;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
 @Service
 public class YoutubeSearchApi {
 	
-	// return ¹ÞÀ» video °¹¼ö ¼³Á¤
+	// return ï¿½ï¿½ï¿½ï¿½ video ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private static final long NUMBER_OF_VIDEOS_RETURNED = 1;
 
     private static YouTube youtube;
@@ -41,7 +40,7 @@ public class YoutubeSearchApi {
                  }
              }).setApplicationName("MusicProgram").build();    
 
-             // ÆÄ¶ó¹ÌÅÍ·Î ³Ñ±æ Äõ¸® 
+             // ï¿½Ä¶ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Ñ±ï¿½ ï¿½ï¿½ï¿½ï¿½ 
              String queryTerm = songName;        
              // Define the API request for retrieving search results.
              YouTube.Search.List search = youtube.search().list("id,snippet");
@@ -49,16 +48,16 @@ public class YoutubeSearchApi {
              search.setKey(apiKey);
              search.setQ(queryTerm);
              
-             // ³Ñ±æ ¼ö ÀÖ´Â ÆÄ¶ó¹ÌÅÍ À¯Çü - ¾Æ·¡ url Âü°í
+             // ï¿½Ñ±ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ - ï¿½Æ·ï¿½ url ï¿½ï¿½ï¿½ï¿½
              // https://developers.google.com/youtube/v3/docs/search/list#parameters
              search.setType("video");
              search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url,snippet/publishedAt)");
              search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
-             // 2020-01-01 ³â ÀÌÈÄ·Î ¿Ã¶ó¿Â µ¿¿µ»ó¸¸ °¡Áö°í ¿Àµµ·Ï ÇÔ -> Songs Å×ÀÌºí¿¡  °¢ °î¿¡ ´ëÇÑ ¹ß¸ÅÀÏ µ¥ÀÌÅÍ°¡ ÀÖÀ¸´Ï±î ±× ÀÌÈÄÀÇ À¯Æ©ºê ¿µ»ó¸¸ °¡Áö°í ¿Àµµ·Ï ¼³Á¤ÇÏ¸é ´õ Á¤È®ÇÒ µí
+             // 2020-01-01 ï¿½ï¿½ ï¿½ï¿½ï¿½Ä·ï¿½ ï¿½Ã¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ -> Songs ï¿½ï¿½ï¿½Ìºï¿½  ï¿½ï¿½ ï¿½î¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½ï¿½
 //             search.setPublishedAfter(DateTime.parseRfc3339("2020-01-01T00:00:00Z")); 
              
              
-             // API È£Ãâ
+             // API È£ï¿½ï¿½
              SearchListResponse searchResponse = search.execute();        
              List<SearchResult> searchResultList = searchResponse.getItems();
              if (searchResultList != null) {
@@ -115,10 +114,10 @@ public class YoutubeSearchApi {
              if (rId.getKind().equals("youtube#video")) {
                  Thumbnail thumbnail = singleVideo.getSnippet().getThumbnails().getDefault();
                  videoUrl = "https://www.youtube.com/watch?v=" + rId.getVideoId();
-                 System.out.println(" Video Id: " + rId.getVideoId()); // videoId°¡ TgOu00Mf3kIÀÎ °æ¿ì, https://www.youtube.com/watch?v=TgOu00Mf3kI ¸¸ ºÙ¿©ÁÖ¸é  ÇØ´ç ¿µ»ó URI
+                 System.out.println(" Video Id: " + rId.getVideoId()); // videoIdï¿½ï¿½ TgOu00Mf3kIï¿½ï¿½ ï¿½ï¿½ï¿½, https://www.youtube.com/watch?v=TgOu00Mf3kI ï¿½ï¿½ ï¿½Ù¿ï¿½ï¿½Ö¸ï¿½  ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ URI
                  System.out.println(" Title: " + esc.htmlUnescape(singleVideo.getSnippet().getTitle())); 
-                 System.out.println(" Thumbnail: " + thumbnail.getUrl()); // ½æ³×ÀÏ ÀÌ¹ÌÁö url
-                 System.out.println(" PublishedAfter: " + singleVideo.getSnippet().getPublishedAt()); // ¿µ»ó ¾÷·ÎµåÀÏ
+                 System.out.println(" Thumbnail: " + thumbnail.getUrl()); // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ url
+                 System.out.println(" PublishedAfter: " + singleVideo.getSnippet().getPublishedAt()); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½
                  System.out.println("\n-------------------------------------------------------------\n");
              }
          }
