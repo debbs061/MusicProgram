@@ -266,14 +266,6 @@
 		    <version>2.3.0</version>
 		</dependency>
 		
-
-		            <!-- https://mvnrepository.com/artifact/com.mchange/c3p0 -->
-					<dependency>
-					    <groupId>com.mchange</groupId>
-					    <artifactId>c3p0</artifactId>
-					    <version>0.9.5.2</version>
-					</dependency>
-		
 	</dependencies>
     <build>
         <plugins>
@@ -291,10 +283,11 @@
                     <downloadJavadocs>true</downloadJavadocs>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
