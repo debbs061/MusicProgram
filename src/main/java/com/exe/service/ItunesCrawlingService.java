@@ -39,6 +39,7 @@ public class ItunesCrawlingService {
     @Transactional
 	public void ItunesChartCrawling() throws IOException {				
     	try{	
+   System.out.println("itunesCrawlingì„ ì‹œì‘í•©ë‹ˆë‹¤"); 		
 			LocalDateTime localDateTime = LocalDateTime.now();
             Timestamp timestamp = Timestamp.valueOf(localDateTime);
             String localDate = timestamp.toString();
@@ -65,24 +66,24 @@ public class ItunesCrawlingService {
 			List<String> albumList = doc.getElementsByClass("col col-album").select("a[href]").eachText();
 			 
 			YoutubeSearchApi obj = new YoutubeSearchApi();
-			int cnt = 0; // À¯Æ©ºê Api È£Ãâ È½¼ö Á¦ÇÑ ¿ëµµ
+			int cnt = 0; // ï¿½ï¿½Æ©ï¿½ï¿½ Api È£ï¿½ï¿½ È½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ëµµ
 			
 			for(int i=0; i<songNameList.size(); i++) {	
 				
-				// °î Á¤º¸ 
+				// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 				String songName = songNameList.get(i);
 			
-				// °¡¼ö Á¤º¸
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				String singerName = singerNameList.get(i);
 				
-				// ¾Ù¹ü Á¤º¸
+				// ï¿½Ù¹ï¿½ ï¿½ï¿½ï¿½ï¿½
 				String albumName = albumList.get(i);
 				
-				// ¾Ù¹ü ÀÌ¹ÌÁö ( 40 / 80 ) 
-				String size40 = albumImageList.get(i+1).split(",")[0];	// ITUNES ·Î°í»çÁøÀÌ ÇÔ²² Å©·Ñ¸µµÇ¹Ç·Î TOP1ºÎÅÍ °¡Á®¿À±â À§ÇØ 1ºÎÅÍ ½ÃÀÛ
+				// ï¿½Ù¹ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ( 40 / 80 ) 
+				String size40 = albumImageList.get(i+1).split(",")[0];	// ITUNES ï¿½Î°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ Å©ï¿½Ñ¸ï¿½ï¿½Ç¹Ç·ï¿½ TOP1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				String albumImgUrl = size40.substring(0,size40.length()-4);
 				
-				// ¾Ù¹ü ÀÌ¹ÌÁö ¾î¶² »çÀÌÁî·Î °¡Á®¿Ã°ÇÁö¿¡ µû¶ó ÃßÈÄ ÀÛ¾÷
+				// ï¿½Ù¹ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½
 //				for(int j=1; j<songNameList.size(); j++) {	
 //					String []albumImage = albumImageList.get(j).split(",");	
 //					String size40 = albumImage[0].substring(0,albumImage[0].length()-4);
@@ -90,9 +91,9 @@ public class ItunesCrawlingService {
 //				}
 				
 				
-				// ±âÁ¸ °¡¼ö Á¤º¸ Á¶È¸
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
 				String singerKey = singerDAO.getSingerKey(singerName);	
-                // µî·ÏµÈ °¡¼ö°¡ ¾øÀ» °æ¿ì INSERT
+                // ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ INSERT
                 if(singerKey == null){
                     singerKey = "ISINGER"+date+time+(i+1);
                     Singer singer = new Singer();
@@ -101,12 +102,12 @@ public class ItunesCrawlingService {
                     singerDAO.insertSingerInfo(singer);
                 }
                 
-                // ±âÁ¸ ¾Ù¹ü Á¤º¸ Á¶È¸
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
                 SearchAlbumDTO searchAlbumDTO = new SearchAlbumDTO();
                 searchAlbumDTO.setAlbum_title(albumName);
                 searchAlbumDTO.setSinger_key(singerKey);
                 String albumKey = albumDAO.getAlbumKey(searchAlbumDTO);
-                // µî·ÏµÈ ¾Ù¹üÀÌ ¾øÀ» °æ¿ì INSERT
+                // ï¿½ï¿½Ïµï¿½ ï¿½Ù¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ INSERT
                 if(albumKey == null){	
                     albumKey = "IALBUM"+date+time+(i+1);
                     Album album = new Album();
@@ -116,14 +117,14 @@ public class ItunesCrawlingService {
                     album.setAlbum_image(albumImgUrl);
                     albumDAO.insertAlbumInfo(album);
                 }
-                // ±âÁ¸ ³ë·¡ Á¤º¸ Á¶È¸
+                // ï¿½ï¿½ï¿½ï¿½ ï¿½ë·¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
                 SearchSongDTO searchSongDTO = new SearchSongDTO();
                 searchSongDTO.setAlbum_key(albumKey);
                 searchSongDTO.setSong_title(songName);
                 String songKey = songDAO.getSongKey(searchSongDTO);
                 String youtubeLink = "";
                 
-                // µî·ÏµÈ ³ë·¡°¡ ¾øÀ» °æ¿ì INSERT - À¯Æ©ºêAPI´Â »çÀÌÆ®´ç 20È¸ ¹Ì¸¸À¸·Î Á¦ÇÑ  	            
+                // ï¿½ï¿½Ïµï¿½ ï¿½ë·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ INSERT - ï¿½ï¿½Æ©ï¿½ï¿½APIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ 20È¸ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  	            
                 if(songKey == null){  
 	            	Song song =  new Song();
 	            	if(cnt<20) {
@@ -132,7 +133,7 @@ public class ItunesCrawlingService {
 	            		cnt++; 
 	            	}
 	                songKey = "ISONG"+date+time+(i+1);                    
-	                // ITUNES´Â ¹ß¸ÅÀÏÀ» Ã¹ÆäÀÌÁö¿¡¼­ ¸ø°¡Á®¿À´Â »óÅÂÀÌ¹Ç·Î ÁÖ¼®Ã³¸®
+	                // ITUNESï¿½ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ ï¿½Ö¼ï¿½Ã³ï¿½ï¿½
 	                //song.setRelDate(updateDateTimeStr);
 	                song.setSong_title(songName);
 	                song.setAlbum_key(albumKey);
@@ -152,14 +153,14 @@ public class ItunesCrawlingService {
 	            	} 
 	             }
                 
-                // ITUNES ¸ŞÀÎÆäÀÌÁö¿¡¼­ ¼øÀ§º¯µ¿ Á¤º¸¸¦ Å©·Ñ¸µÇÏÁö ¸øÇÏ¹Ç·Î °è»ê
+                // ITUNES ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½Ñ¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¹Ç·ï¿½ ï¿½ï¿½ï¿½
                 Chart chart = new Chart();
                 chart.setSite_name("ITUNES");
                 chart.setSinger_key(singerKey); 
                 chart.setAlbum_key(albumKey);
                 chart.setSong_key(songKey);
                 
-                // CHART Å×ÀÌºí¿¡ µé¾î¿Â Àû ¾ø´Â °îÀÌ¶ó¸é ¼øÀ§º¯µ¿ 0À¸·Î Ã³¸®
+                // CHART ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
                 int rankChange = 0;                
                 Integer preRank = chartDAO.getPreRank(chart);                
                 preRank = preRank == null ? 0 : preRank;       
@@ -167,20 +168,20 @@ public class ItunesCrawlingService {
                 	rankChange = preRank - (i+1);
                 }     
                 
-                // ³¯Â¥º° Â÷Æ®Á¤º¸ INSERT
+                // ï¿½ï¿½Â¥ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ INSERT
                 chart.setDate(chartDate.getDate());
                 chart.setTime(chartDate.getTime());
                 chart.setRank(i+1);
                 chart.setRank_change(rankChange);
                 chartDAO.insertChart(chart);
 				
-				System.out.println("¼øÀ§ : "+(i+1)+"À§");
-				System.out.println("°î¸í : "+songName);
-				System.out.println("°¡¼ö¸í : "+singerName);
-				System.out.println("¾Ù¹ü¸í : "+albumName);
-				System.out.println("¾Ù¹ü ÀÌ¹ÌÁö URL : "+albumImgUrl);
-				System.out.println("¼øÀ§º¯µ¿ : "+rankChange);
-				System.out.println("À¯Æ©ºê¸µÅ© : "+youtubeLink);
+				System.out.println("ï¿½ï¿½ï¿½ï¿½ : "+(i+1)+"ï¿½ï¿½");
+				System.out.println("ï¿½ï¿½ï¿½ : "+songName);
+				System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : "+singerName);
+				System.out.println("ï¿½Ù¹ï¿½ï¿½ï¿½ : "+albumName);
+				System.out.println("ï¿½Ù¹ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ URL : "+albumImgUrl);
+				System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : "+rankChange);
+				System.out.println("ï¿½ï¿½Æ©ï¿½ê¸µÅ© : "+youtubeLink);
 				System.out.println();
 				
 			}	

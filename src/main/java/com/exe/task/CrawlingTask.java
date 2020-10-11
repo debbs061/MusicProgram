@@ -29,6 +29,7 @@ public class CrawlingTask {
 	 */
 	@Scheduled(cron="0 45 3 * * *")
 	public void checkFiles()throws Exception{
+	System.out.println("작동 시작합니다 ");
 		ics.ItunesChartCrawling();
 		fcs.FloChartCrawling();
 	}
