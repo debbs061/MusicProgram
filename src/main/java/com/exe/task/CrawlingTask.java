@@ -27,7 +27,7 @@ public class CrawlingTask {
 	/*
 	 * 매일 새벽 2시마다 각 사이트 크롤링 한다.
 	 */
-	@Scheduled(cron="0 30 3 * * *")
+	@Scheduled(cron="0 45 3 * * *")
 	public void checkFiles()throws Exception{
 		ics.ItunesChartCrawling();
 		fcs.FloChartCrawling();
