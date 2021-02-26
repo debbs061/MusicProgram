@@ -48,7 +48,7 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
     │            	│	├── appServlet
     │            	│	│   └── sevlet-context.xml
     │            	│	└── root-context.xml
-    │                └── web.xml
+    │               └── web.xml
     └── pom.xml
 
 ### REST API
