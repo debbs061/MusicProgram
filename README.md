@@ -4,6 +4,16 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
 
 ![](https://raw.githubusercontent.com/debbs061/MusicProgram/master/doc/gifAnimations/musicchart.gif)
 
+### 개발환경
+- OS: Mac OS
+- IDE : STS, SequelPro
+- Language : JAVA
+- Middleware : Tomcat
+- ORM : MyBatis
+- DBMS : MariaDB
+- Server : AWS linux ubuntu
+- Framework : Spring 4.3
+
 ### Folder Structure
 
     .
@@ -57,9 +67,3 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
 | /api/getInfo/{searchWord} | 해당 키워드가 들어간 검색결과가 반환됩니다   | /api/getInfo/아이유          |
 
 
-### How it all fits together (파일구조 도식형식)
-**Status:** Optional.
-
-**Requirements:**
-- Must not have its own title.
-- Must link to local image in current repository.
