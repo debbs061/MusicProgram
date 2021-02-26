@@ -36,10 +36,10 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
     │            │		 ├── ItunesCrawlingService.java
     │            │		 └── YoutubeSearchApi.java		
     │            └── com/exe/task
-    │               		 └── CrawlingTask.java	
+    │                    └── CrawlingTask.java	
     ├── src/main/resources 
     │   		 ├── com/exe/mapper
-    │            │		  └── sourceMapper.xml	
+    │            │       └── sourceMapper.xml	
     │            ├── log4j.xml
     │            └── mybatis-config.xml
     ├── src/main/webapp
