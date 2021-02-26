@@ -3,7 +3,7 @@
 Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데이터를 JSON 형태로 제공하는 REST-API 입니다.
 
 ******동영상넣기******
-
+![](https://raw.githubusercontent.com/debbs061/MusicProgram/master/doc/gifAnimations/musicchart.gif)
 
 ### Folder Structure
 
