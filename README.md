@@ -10,36 +10,36 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
     .
     ├── src/main/java                   
     │            ├── com/exe/dao
-    │            │			 ├── AlbumDAO.java
-    │            │			 ├── ChartDAO.java
-    │            │			 ├── SingerDAO.java
-    │            │			 └── SongDAO.java
+    │            │		 ├── AlbumDAO.java
+    │            │		 ├── ChartDAO.java
+    │            │		 ├── SingerDAO.java
+    │            │		 └── SongDAO.java
     │            ├── com/exe/domain
-    │            │			 ├── Album.java
-    │            │			 ├── Chart.java
-    │            │			 ├── ChartDate.java
-    │            │			 ├── Singer.java
-    │            │			 └── Song.java
+    │            │		 ├── Album.java
+    │            │		 ├── Chart.java
+    │            │		 ├── ChartDate.java
+    │            │		 ├── Singer.java
+    │            │		 └── Song.java
     │            ├── com/exe/dto
-    │            │			 ├── SearchAlbumDTO.java
-    │            │			 ├── SearchChartDTO.java
-    │            │			 ├── SearchSingerDTO.java
-    │            │			 ├── SearchSongDTO.java
-    │            │			 └── SearchWordDTO.java		
+    │            │		 ├── SearchAlbumDTO.java
+    │            │		 ├── SearchChartDTO.java
+    │            │		 ├── SearchSingerDTO.java
+    │            │		 ├── SearchSongDTO.java
+    │            │		 └── SearchWordDTO.java		
     │            ├── com/exe/musicchart
-    │            │			 ├── MusicController.java
-    │            │			 └── RestMusicController.java		
+    │            │		 ├── MusicController.java
+    │            │		 └── RestMusicController.java		
     │            ├── com/exe/service
-    │            │			 ├── ApiService.java
-    │            │			 ├── ApiServiceImpl.java
-    │            │			 ├── FloCrawlingService.java
-    │            │			 ├── ItunesCrawlingService.java
-    │            │			 └── YoutubeSearchApi.java		
+    │            │		 ├── ApiService.java
+    │            │		 ├── ApiServiceImpl.java
+    │            │		 ├── FloCrawlingService.java
+    │            │		 ├── ItunesCrawlingService.java
+    │            │		 └── YoutubeSearchApi.java		
     │            └── com/exe/task
     │               		 └── CrawlingTask.java	
     ├── src/main/resources 
     │   		 ├── com/exe/mapper
-    │            │		   └── sourceMapper.xml	
+    │            │		  └── sourceMapper.xml	
     │            ├── log4j.xml
     │            └── mybatis-config.xml
     ├── src/main/webapp
