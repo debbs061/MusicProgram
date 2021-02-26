@@ -44,7 +44,7 @@ public class YoutubeSearchApi {
              String queryTerm = songName;        
              // Define the API request for retrieving search results.
              YouTube.Search.List search = youtube.search().list("id,snippet");
-             String apiKey = "AIzaSyAuh19K-zc6J2F8tXB8FbSN7J_O9fiKboM";
+             String apiKey = "##"; 
              search.setKey(apiKey);
              search.setQ(queryTerm);
              
