@@ -2,7 +2,7 @@
 
 Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데이터를 JSON 형태로 제공하는 REST-API 입니다.
 
-### 개발환경
+## 개발환경
 - OS: Mac OS
 - IDE : STS, SequelPro
 - Language : JAVA
@@ -12,7 +12,7 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
 - Server : AWS linux ubuntu
 - Framework : Spring 4.3
 
-### Folder Structure
+## Folder Structure
 
     .
     ├── src/main/java                   
@@ -58,7 +58,7 @@ Music Chart 는 음악차트사이트 'FLO'와 'ITUNES' 의 Top-100 차트 데�
     │               └── web.xml
     └── pom.xml
 
-### REST API
+## REST API
 | URL                       | Description               | Example                   |
 |---------------------------|---------------------------|---------------------------|
 | /api/getTodayChart/{date} | 해당 날짜의 Top100 데이터가 반환됩니다  | /api/getTodayChart/210227 |
